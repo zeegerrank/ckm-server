@@ -23,6 +23,8 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.use("/api/users", require("./routes/api/usersRoutes"));
+
 const port = 3500 || process.env.PORT;
 mongoose.connection.once("open", () => {
   console.log("Connected to database");
