@@ -1,17 +1,19 @@
-require("dotenv").config();
-const express = require("express");
+require("dotenv").config();const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 const { dbConnect } = require("./config/dbConnect");
+const corsOptions = require("./config/corsOptions");
 
 console.log(process.env.NODE_ENV);
 
 dbConnect();
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(
   morgan(
@@ -24,6 +26,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", require("./routes/api/usersRoutes"));
+app.use("/api/auth", require("./routes/api/authRoutes"));
 
 const port = 3500 || process.env.PORT;
 mongoose.connection.once("open", () => {

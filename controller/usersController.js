@@ -22,7 +22,9 @@ const userController = {
     const duplicatedEmail = await User.findOne({ email });
     const duplicatedUsername = await User.findOne({ username });
     if (duplicatedEmail || duplicatedUsername) {
-      return res.status(400).json({ message: "User already exists" });
+      return res
+        .status(400)
+        .json({ message: "Username or email is already exists" });
     }
     /**hash password */
     const salt = await bcrypt.genSalt(10);
@@ -52,6 +54,10 @@ const userController = {
     });
     res.status(200).json(changedUserInfo);
   }),
+
+  /** @path DELETE /api/users */
+  /** @desc Delete user */
+  /** @access Private */
   deleteUser: asyncHandler(async (req, res) => {
     const { _id } = req.user;
     /** delete user */
