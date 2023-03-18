@@ -25,7 +25,6 @@ const authController = {
     const accessToken = jwt.sign(
       {
         userInfo: {
-          id: user._id,
           username: user.username,
           roles: user.roles,
         },
@@ -35,7 +34,7 @@ const authController = {
     );
 
     const refreshToken = jwt.sign(
-      { id: user._id },
+      { username: user.username, id: user._id },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "7d" }
     );
@@ -55,7 +54,7 @@ const authController = {
     const cookies = req.cookies;
 
     if (!cookies?.jwt) {
-      res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const refreshToken = cookies.jwt;
@@ -63,12 +62,11 @@ const authController = {
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
-
       async (err, decoded) => {
         if (err) return res.status(403).json({ message: "Forbidden" });
 
         const user = await User.findOne({
-          _id: decoded.id,
+          username: decoded.username,
         }).exec();
 
         if (!user) return res.status(401).json({ message: "Unauthorized" });
@@ -83,6 +81,7 @@ const authController = {
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "15m" }
         );
+
         res.json({ accessToken });
       }
     );
