@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const { dbConnect } = require("./config/dbConnect");
 const corsOptions = require("./config/corsOptions");
+const { logEvent } = require("./middleware/logger");
 
 console.log(process.env.NODE_ENV);
 
@@ -38,7 +39,7 @@ mongoose.connection.once("open", () => {
 
 mongoose.connection.on("error", (err) => {
   console.log(err);
-  logEvents(
+  logEvent(
     `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
     "DatabaseErrLog.log"
   );
