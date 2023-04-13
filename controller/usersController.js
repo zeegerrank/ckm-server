@@ -1,4 +1,5 @@
-const asyncHandler = require("express-async-handler");const bcrypt = require("bcrypt");
+const asyncHandler = require("express-async-handler");
+const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const userController = {
   /** @path GET /api/users */
@@ -13,7 +14,7 @@ const userController = {
   /** @desc Create new user */
   /** @access Public */
   createNewUser: asyncHandler(async (req, res) => {
-    const { email, username, password } = req.body;
+    const { email, username, password, role } = req.body;
     /**check required info */
     if (!email || !username || !password) {
       return res.status(400).json({ message: "Please enter all fields" });
@@ -35,6 +36,7 @@ const userController = {
       email,
       username,
       password: hashedPassword,
+      roles: [role],
     });
     /**save user to database */
     const savedUser = await newUser.save();
@@ -45,12 +47,13 @@ const userController = {
   /** @desc Update user */
   /** @access Private */
   updateUser: asyncHandler(async (req, res) => {
-    const { _id } = req.user;
+    const { id } = req.params;
     /** change info as require */
-    const changedUserInfo = await User.findByIdAndUpdate(_id, {
+    const changedUserInfo = await User.findByIdAndUpdate(id, {
       username: req?.body?.username,
       email: req?.body?.email,
       password: req?.body?.password,
+      roles: req?.body?.role,
     });
     res.status(200).json(changedUserInfo);
   }),
