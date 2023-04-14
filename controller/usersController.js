@@ -36,7 +36,7 @@ const userController = {
       email,
       username,
       password: hashedPassword,
-      roles: [role],
+      roles: role || "customer",
     });
     /**save user to database */
     const savedUser = await newUser.save();
@@ -62,9 +62,10 @@ const userController = {
   /** @desc Delete user */
   /** @access Private */
   deleteUser: asyncHandler(async (req, res) => {
-    const { _id } = req.user;
+    console.log(req.body);
+    const { id } = req.body;
     /** delete user */
-    const deletedUser = await User.findByIdAndDelete(_id);
+    const deletedUser = await User.findByIdAndDelete(id);
     res.status(200).json(deletedUser);
   }),
 };
