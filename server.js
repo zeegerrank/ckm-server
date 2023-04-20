@@ -1,5 +1,4 @@
-require("dotenv").config();
-const express = require("express");
+require("dotenv").config();const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
@@ -19,7 +18,7 @@ app.use(cookieParser());
 
 app.use(
   morgan(
-    `origin: ":req[header.origin]" [:date[clf]] :method ":url" status: :status`
+    `origin: ":req.headers["origin"]" [:date[clf]] :method ":url" status: :status`
   )
 );
 
