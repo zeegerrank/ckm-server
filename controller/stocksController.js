@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");const Stock = require("../models/Stock");
-const stockController = {
+const stocksController = {
   /** @path GET /api/stock */
   /** @desc Get all stock */
   /** @access Private */
@@ -12,27 +12,14 @@ const stockController = {
   /** @desc Create new stock */
   /** @access Private */
   createNewStock: asyncHandler(async (req, res) => {
-    const {
-      barcodeNumber,
-      name,
-      category,
-      brand,
-      density,
-      state,
-      quantity,
-      unit,
-      weightPerUnit,
-      totalWeight,
-    } = req.body;
-
     /**check required info */
     if (
-      !barcodeNumber ||
-      !name ||
-      !brand ||
-      !state ||
-      !unit ||
-      !weightPerUnit
+      !req.body.barcodeNumber ||
+      !req.body.name ||
+      !req.body.brand ||
+      !req.body.state ||
+      !req.body.unit ||
+      !req.body.weightPerUnit
     ) {
       return res.status(400).json({ message: "Please enter all fields" });
     }
@@ -49,16 +36,16 @@ const stockController = {
 
     /**create new stock */
     const newStock = new Stock({
-      barcodeNumber,
-      name,
-      category,
-      brand,
-      density,
-      state,
-      quantity,
-      unit,
-      weightPerUnit,
-      totalWeight,
+      barcodeNumber: req?.body?.barcodeNumber,
+      name: req?.body?.name,
+      category: req?.body?.category,
+      brand: req?.body?.brand,
+      density: req?.body?.density,
+      state: req?.body?.state,
+      quantity: req?.body?.quantity,
+      unit: req?.body?.unit,
+      weightPerUnit: req?.body?.weightPerUnit,
+      totalWeight: req?.body?.totalWeight,
     });
 
     /**save stock to database */
@@ -121,3 +108,5 @@ const stockController = {
     res.status(200).json(deletedStock);
   }),
 };
+
+module.exports = stocksController;
