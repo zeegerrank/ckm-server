@@ -1,4 +1,5 @@
-require("dotenv").config();const express = require("express");
+require("dotenv").config();
+const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
@@ -31,7 +32,7 @@ app.use("/api/users", require("./routes/api/usersRoutes"));
 app.use("/api/stocks", require("./routes/api/stocksRoutes"));
 app.use("/api/auth", require("./routes/api/authRoutes"));
 
-const port = 3500 || process.env.PORT;
+const port = process.env.PORT || 3500;
 mongoose.connection.once("open", () => {
   console.log("Connected to database");
   app.listen(port, () => {
