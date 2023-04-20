@@ -17,9 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(
-  morgan(
-    `origin: ":req.headers["origin"]" [:date[clf]] :method ":url" status: :status`
-  )
+  morgan(`origin: ":referrer" [:date[clf]] :method ":url" status: :status`)
 );
 
 app.get("/", (req, res) => {
