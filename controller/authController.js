@@ -1,5 +1,4 @@
-const User = require("../models/User.js");
-const asyncHandler = require("express-async-handler");
+const User = require("../models/User.js");const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -12,14 +11,14 @@ const authController = {
 
     /**check require field */
     if (!email || !password) {
-      res.status(400).json("Please provide an email and password");
+      return res.status(400).json("Please provide an email and password");
     }
     const user = await User.findOne({ email }).exec();
 
     if (!user) {
-      res.status(401).json("Invalid email or password");
+      return res.status(401).json("Invalid email or password");
     } else if (!(await bcrypt.compare(password, user.password))) {
-      res.status(401).json("Invalid email or password");
+      return res.status(401).json("Invalid email or password");
     }
 
     const accessToken = jwt.sign(
